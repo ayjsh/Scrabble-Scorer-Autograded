@@ -12,6 +12,9 @@ const oldPointStructure = {
   10: ['Q', 'Z']
 };
 
+let userWord;
+userWord = "";
+
 function oldScrabbleScorer(word) {
 	word = word.toUpperCase();
 	let letterPoints = "";
@@ -33,18 +36,73 @@ function oldScrabbleScorer(word) {
 // don't change the names or your program won't work as expected. //
 
 function initialPrompt() {
-   console.log("Let's play some scrabble! Enter a word:");
+   userWord = input.question("Let's play some scrabble! Enter a word: ");
+
 };
 
-let simpleScorer;
+function simpleScorer(word){
+   let letterPoints = word.length;
+   return letterPoints;
+}
 
-let vowelBonusScorer;
+function vowelBonusScorer(word){
+   word = word.toUpperCase();
+   let letterPoints = 0;
+   let vowelArray = ["A", "E", "I", "O", "U"];
+   for (let i = 0; i < word.length; i++){
+      if (vowelArray.includes(word[i])){
+         letterPoints = letterPoints + 3;
+      } else {
+         letterPoints = letterPoints + 1;
+      }
+   }
+   return letterPoints;
+}
 
-let scrabbleScorer;
+const scrabbleScorer = [simpleScorer, vowelBonusScorer, oldScrabbleScorer];
 
-const scoringAlgorithms = [];
+let simple = {
+   name: "Simple Scorer",
+   description: "Each letter is worth 1 point.",
+   scoringFunction: simpleScorer
+};
 
-function scorerPrompt() {}
+let vowels = {
+   name: "Bonus Vowels",
+   description: "Vowels are 3 pts, consonants are 1 pt.",
+   scoringFunction: vowelBonusScorer
+};
+
+let original = {
+   name: "Scrabble",
+   description: "The traditional scoring algorithm.",
+   scoringFunction: oldScrabbleScorer
+};
+
+const scoringAlgorithms = [simple, vowels, original];
+
+
+function scorerPrompt() {
+   whichScorer = input.question(`
+   Welcome to the Scrabble score calculator!
+   Which scoring algorithm would you like to use?
+
+   0 - Simple Score: Each character is worth 1 point. 
+   1 - Bonus Vowels: Vowels are worth 3 pts.
+   2 - Scrabble: The traditional scoring algorithm.
+
+   Enter 0, 1, or 2: `);
+   if (whichScorer == 0){
+      console.log("algorithm name: ", scoringAlgorithms[0].name);
+      console.log("scoringFunction result: ", scoringAlgorithms[0].scoringFunction("Javascript"));
+   } else if (whichScorer == 1){
+      console.log("algorithm name: ", scoringAlgorithms[1].name);
+    console.log("scoringFunction result: ", scoringAlgorithms[1].scoringFunction("Javascript"));
+   } else if (whichScorer == 2) {
+     console.log("algorithm name: ", scoringAlgorithms[2].name);
+     console.log("scoringFunction result: ", scoringAlgorithms[2].scoringFunction("Javascript"));
+   }
+};
 
 function transform() {};
 
@@ -52,6 +110,7 @@ let newPointStructure;
 
 function runProgram() {
    initialPrompt();
+   scorerPrompt();
    
 }
 
