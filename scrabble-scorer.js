@@ -36,11 +36,15 @@ function oldScrabbleScorer(word) {
 
 function initialPrompt() {
    userWord = input.question("Let's play some scrabble! Enter a word: ");
-
+   // if ((typeof userWord === isNaN())|| (typeof userWord === Symbol)) {
+   //    console.log("That's not a word. Please enter a word: ")
+   // } else {
+   //    return userWord;
+   // }
 };
 
 function simpleScorer(word){
-   let letterPoints = word.length;
+   let letterPoints = word.length;  
    return letterPoints;
 };
 
@@ -106,13 +110,13 @@ function scorerPrompt() {
    Enter 0, 1, or 2: `);
    if (whichScorer == 0){
       console.log("Scoring Algorithm: ", scoringAlgorithms[0].name);
-      console.log("Your Score: ", scoringAlgorithms[0].scoringFunction(userWord));
+      console.log("Your Score: ", scoringAlgorithms[0].scorerFunction(userWord));
    } else if (whichScorer == 1){
       console.log("Scoring Algorithm: ", scoringAlgorithms[1].name);
-      console.log("Your Score: ", scoringAlgorithms[1].scoringFunction(userWord));
+      console.log("Your Score: ", scoringAlgorithms[1].scorerFunction(userWord));
    } else if (whichScorer == 2) {
       console.log("Scoring Algorithme: ", scoringAlgorithms[2].name);
-      console.log("Your Score: ", scoringAlgorithms[2].scoringFunction(userWord));
+      console.log("Your Score: ", scoringAlgorithms[2].scorerFunction(userWord));
    }
 };
 
@@ -123,7 +127,7 @@ function transform(oldScoring) {
         for(i=0; i<itemArray.length; i++) {
           newScoring[itemArray[i].toLowerCase()] = Number(item);
           }
-      }      
+      }           
       return newScoring
     };
    // console.log("Letters with score '4':", oldPointStructure['4']);
@@ -133,12 +137,14 @@ function transform(oldScoring) {
    // console.log("Letters with score '8':", letters);
    // console.log("2nd letter within the key '8' array:", letters[1]);
 
-const newPointStructure = transform(oldPointStructure);
+let newPointStructure = transform(oldPointStructure);
+    newPointStructure[' '] = 0;
+
 
 function runProgram() {
-   initialPrompt();
-   scorerPrompt();
-   
+    initialPrompt();
+    scorerPrompt();
+    
 }
 
 // Don't write any code below this line //
