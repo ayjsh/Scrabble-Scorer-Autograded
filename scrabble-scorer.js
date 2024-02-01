@@ -16,7 +16,7 @@ let userWord;
 userWord = "";
 
 function oldScrabbleScorer(word) {
-	word = word.toUpperCase();
+	word = word.toLowerCase();
 	let letterPoints = "";
  
 	for (let i = 0; i < word.length; i++) {
@@ -26,7 +26,6 @@ function oldScrabbleScorer(word) {
 		 if (oldPointStructure[pointValue].includes(word[i])) {
 			letterPoints += `Points for '${word[i]}': ${pointValue}\n`
 		 }
- 
 	  }
 	}
 	return letterPoints;
@@ -43,43 +42,56 @@ function initialPrompt() {
 function simpleScorer(word){
    let letterPoints = word.length;
    return letterPoints;
-}
+};
 
 function vowelBonusScorer(word){
-   word = word.toUpperCase();
+   word = word.toLowerCase();
    let letterPoints = 0;
-   let vowelArray = ["A", "E", "I", "O", "U"];
+
    for (let i = 0; i < word.length; i++){
+      const vowelArray = ["a", "e", "i", "o", "u"];
       if (vowelArray.includes(word[i])){
-         letterPoints = letterPoints + 3;
+         letterPoints = letterPoints += 3;
       } else {
-         letterPoints = letterPoints + 1;
+         letterPoints = letterPoints += 1;
       }
    }
    return letterPoints;
-}
+};
 
-const scrabbleScorer = [simpleScorer, vowelBonusScorer, oldScrabbleScorer];
+function scrabbleScorer(word){
+   word = word.toLowerCase();
+   let letterPoints = 0;
+   let checkedLetter = "";
+      for (let i = 0; i < word.length; i++) {
+      checkedLetter = word[i];
+      if (newPointStructure.hasOwnProperty(checkedLetter)){
+          letterPoints = letterPoints + newPointStructure[checkedLetter];
+         }
+    }
+    return letterPoints;
+
+};
 
 let simple = {
    name: "Simple Scorer",
    description: "Each letter is worth 1 point.",
-   scoringFunction: simpleScorer
+   scorerFunction: simpleScorer
 };
 
 let vowels = {
    name: "Bonus Vowels",
    description: "Vowels are 3 pts, consonants are 1 pt.",
-   scoringFunction: vowelBonusScorer
+   scorerFunction: vowelBonusScorer
 };
 
-let original = {
+let newScrabble = {
    name: "Scrabble",
    description: "The traditional scoring algorithm.",
-   scoringFunction: oldScrabbleScorer
+   scorerFunction: scrabbleScorer
 };
 
-const scoringAlgorithms = [simple, vowels, original];
+const scoringAlgorithms = [simple, vowels, newScrabble];
 
 
 function scorerPrompt() {
@@ -93,20 +105,35 @@ function scorerPrompt() {
 
    Enter 0, 1, or 2: `);
    if (whichScorer == 0){
-      console.log("algorithm name: ", scoringAlgorithms[0].name);
-      console.log("scoringFunction result: ", scoringAlgorithms[0].scoringFunction("Javascript"));
+      console.log("Scoring Algorithm: ", scoringAlgorithms[0].name);
+      console.log("Your Score: ", scoringAlgorithms[0].scoringFunction(userWord));
    } else if (whichScorer == 1){
-      console.log("algorithm name: ", scoringAlgorithms[1].name);
-    console.log("scoringFunction result: ", scoringAlgorithms[1].scoringFunction("Javascript"));
+      console.log("Scoring Algorithm: ", scoringAlgorithms[1].name);
+      console.log("Your Score: ", scoringAlgorithms[1].scoringFunction(userWord));
    } else if (whichScorer == 2) {
-     console.log("algorithm name: ", scoringAlgorithms[2].name);
-     console.log("scoringFunction result: ", scoringAlgorithms[2].scoringFunction("Javascript"));
+      console.log("Scoring Algorithme: ", scoringAlgorithms[2].name);
+      console.log("Your Score: ", scoringAlgorithms[2].scoringFunction(userWord));
    }
 };
 
-function transform() {};
+function transform(oldScoring) {
+      newScoring = { };
+      for (item in oldScoring) {
+        itemArray = oldScoring[item];
+        for(i=0; i<itemArray.length; i++) {
+          newScoring[itemArray[i].toLowerCase()] = Number(item);
+          }
+      }      
+      return newScoring
+    };
+   // console.log("Letters with score '4':", oldPointStructure['4']);
+   // console.log("3rd letter within the key '4' array:", oldPointStructure['4'][2]);
 
-let newPointStructure;
+   // let letters = oldPointStructure['8'];
+   // console.log("Letters with score '8':", letters);
+   // console.log("2nd letter within the key '8' array:", letters[1]);
+
+const newPointStructure = transform(oldPointStructure);
 
 function runProgram() {
    initialPrompt();
