@@ -55,9 +55,9 @@ function vowelBonusScorer(word){
    for (let i = 0; i < word.length; i++){
       const vowelArray = ["a", "e", "i", "o", "u"];
       if (vowelArray.includes(word[i])){
-         letterPoints = letterPoints += 3;
+         letterPoints += 3;
       } else {
-         letterPoints = letterPoints += 1;
+         letterPoints += 1;
       }
    }
    return letterPoints;
